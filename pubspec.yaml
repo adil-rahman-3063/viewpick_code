@@ -1,0 +1,80 @@
+name: viewpick_web
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 6.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  supabase_flutter: ^1.4.0
+  flutter_dotenv: ^5.0.2
+  google_fonts: ^6.1.0
+  app_links: ^3.4.5
+  http: ^1.2.1
+  flutter_card_swiper: ^6.0.0
+  youtube_player_flutter: ^9.1.3
+  url_launcher: ^6.3.2
+  shared_preferences: ^2.5.3
+  package_info_plus: ^9.0.0
+  geolocator: ^14.0.1
+  geocoding: ^4.0.0
+  firebase_core: ^4.10.0
+  firebase_analytics: ^12.4.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/icon.png"
+    background_color: "#hex_code"
+    theme_color: "#hex_code"
+  windows:
+    generate: true
+    image_path: "assets/icon.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/icon.png"
+
+dependency_overrides:
+  sign_in_with_apple: ^7.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+  fonts:
+    - family: BitcountGridSingle
+      fonts:
+        - asset: assets/fonts/BitcountGridSingle_Roman-Light.ttf
+          style: normal
