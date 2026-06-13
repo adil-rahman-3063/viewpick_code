@@ -2,7 +2,23 @@
 
 **ViewPick** is a modern, interactive movie and TV show discovery platform built with Flutter. Originally a mobile app, it has been fully rebuilt and optimized as a truly responsive Web Application (PWA). It reimagines how you find your next watch by combining a Tinder-style swipe interface with smart, personalized recommendations.
 
-🌐 **Live Web Version:** [https://adil-rahman-3063.github.io/viewpick/](https://adil-rahman-3063.github.io/viewpick/)
+🌐 **Live Web Version:** [https://viewpick.vercel.app](https://viewpick.vercel.app)
+
+## 📱 Install as an App (PWA)
+
+You don't need an app store to install ViewPick! You can install it directly to your home screen for a native, full-screen experience without any lag.
+
+**For iOS (iPhone/iPad):**
+1. Open [ViewPick](https://viewpick.vercel.app) in **Safari**.
+2. Tap the **Share** button at the bottom of the screen (the square with an arrow pointing up).
+3. Scroll down and tap **"Add to Home Screen"**.
+4. Tap **Add** in the top right corner. 
+
+**For Android:**
+1. Open [ViewPick](https://viewpick.vercel.app) in **Chrome**.
+2. A pop-up may automatically appear asking to "Add ViewPick to Home screen". Tap it!
+3. If it doesn't appear, tap the **three dots** in the top right corner of Chrome.
+4. Tap **"Add to Home screen"** or **"Install app"**.
 
 ## ✨ Features
 
@@ -71,22 +87,6 @@
 *   **Responsive Scaling:** The app relies on device-width viewports to scale naturally on phones, tablets, and desktop monitors. 
 *   **HTML Renderer:** Uses CanvasKit or the HTML renderer depending on the build configuration for optimal performance.
 *   **PWA Ready:** The app can be installed directly from the browser to the home screen of any device.
-
-## 📱 Install as an App (PWA)
-
-You don't need an app store to install ViewPick! You can install it directly to your home screen for a native, full-screen experience without any lag.
-
-**For iOS (iPhone/iPad):**
-1. Open [ViewPick](https://viewpick.vercel.app) in **Safari**.
-2. Tap the **Share** button at the bottom of the screen (the square with an arrow pointing up).
-3. Scroll down and tap **"Add to Home Screen"**.
-4. Tap **Add** in the top right corner. 
-
-**For Android:**
-1. Open [ViewPick](https://viewpick.vercel.app) in **Chrome**.
-2. A pop-up may automatically appear asking to "Add ViewPick to Home screen". Tap it!
-3. If it doesn't appear, tap the **three dots** in the top right corner of Chrome.
-4. Tap **"Add to Home screen"** or **"Install app"**.
 
 ## ☕ Support the Developer
 
