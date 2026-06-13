@@ -72,6 +72,22 @@
 *   **HTML Renderer:** Uses CanvasKit or the HTML renderer depending on the build configuration for optimal performance.
 *   **PWA Ready:** The app can be installed directly from the browser to the home screen of any device.
 
+## 📱 Install as an App (PWA)
+
+You don't need an app store to install ViewPick! You can install it directly to your home screen for a native, full-screen experience without any lag.
+
+**For iOS (iPhone/iPad):**
+1. Open [ViewPick](https://viewpick.vercel.app) in **Safari**.
+2. Tap the **Share** button at the bottom of the screen (the square with an arrow pointing up).
+3. Scroll down and tap **"Add to Home Screen"**.
+4. Tap **Add** in the top right corner. 
+
+**For Android:**
+1. Open [ViewPick](https://viewpick.vercel.app) in **Chrome**.
+2. A pop-up may automatically appear asking to "Add ViewPick to Home screen". Tap it!
+3. If it doesn't appear, tap the **three dots** in the top right corner of Chrome.
+4. Tap **"Add to Home screen"** or **"Install app"**.
+
 ## ☕ Support the Developer
 
 If you enjoy using ViewPick and want to support its development, consider buying me a coffee! ❤️
