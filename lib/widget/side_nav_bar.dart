@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../services/supabase_service.dart';
+import 'login_prompt.dart';
 
 
 class FrostedSideBar extends StatelessWidget {
@@ -17,6 +19,19 @@ class FrostedSideBar extends StatelessWidget {
   static const double _pillRadius = 40.0;
 
   static void handleNavigation(BuildContext context, int index) {
+    if (SupabaseService.currentUser() == null) {
+      if (index == 0) {
+        showLoginPrompt(context, message: 'Sign in to Swipe and find the perfect movie or series to watch with friends!');
+        return;
+      } else if (index == 3) {
+        showLoginPrompt(context, message: 'Sign in to view and manage your watchlist and watched history!');
+        return;
+      } else if (index == 4) {
+        showLoginPrompt(context, message: 'Sign in to view your profile, stats, and settings!');
+        return;
+      }
+    }
+
     final routes = ['/swipe', '/home', '/explore', '/list', '/profile'];
     if (index >= 0 && index < routes.length) {
       Navigator.of(context).pushReplacementNamed(routes[index]);

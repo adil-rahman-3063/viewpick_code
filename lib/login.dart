@@ -249,6 +249,20 @@ class _LoginPageState extends State<LoginPage> {
                       label: const Text('Continue with Google'),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacementNamed('/home');
+                    },
+                    child: Text(
+                      'Explore as Guest',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

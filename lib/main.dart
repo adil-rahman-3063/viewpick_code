@@ -98,7 +98,11 @@ class MyApp extends StatelessWidget {
                 settings.name == '/login' ||
                 settings.name == '/register' ||
                 settings.name == '/forgot_password' ||
-                settings.name == '/password_change';
+                settings.name == '/password_change' ||
+                settings.name == '/home' ||
+                settings.name == '/explore' ||
+                (settings.name != null && settings.name!.startsWith('/movie/')) ||
+                (settings.name != null && settings.name!.startsWith('/series/'));
 
             if (session == null && !isPublicRoute) {
               return MaterialPageRoute(builder: (context) => const LoginPage());

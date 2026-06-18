@@ -5,7 +5,7 @@ import '../services/tmdb_service.dart';
 import '../services/supabase_service.dart';
 import '../services/location_service.dart';
 import '../widget/toast.dart';
-
+import '../widget/login_prompt.dart';
 import 'actors.dart';
 
 class SeriesPage extends StatefulWidget {
@@ -161,6 +161,11 @@ class _SeriesPageState extends State<SeriesPage> {
   Future<void> _handleMainAction() async {
     if (_tvDetails == null) return;
 
+    if (SupabaseService.currentUser() == null) {
+      showLoginPrompt(context, message: 'Please sign in to add titles to your watchlist or mark them as watched.');
+      return;
+    }
+
     try {
       if (_isWatched) {
         // Remove from watched
@@ -260,6 +265,11 @@ class _SeriesPageState extends State<SeriesPage> {
   Future<void> _toggleLike() async {
     if (_tvDetails == null) return;
 
+    if (SupabaseService.currentUser() == null) {
+      showLoginPrompt(context, message: 'Please sign in to add titles to your favorites.');
+      return;
+    }
+
     final newLikeState = !_isLiked;
     setState(() => _isLiked = newLikeState);
 
@@ -294,6 +304,11 @@ class _SeriesPageState extends State<SeriesPage> {
   }
 
   Future<void> _handleEpisodeTap(int season, int episode) async {
+    if (SupabaseService.currentUser() == null) {
+      showLoginPrompt(context, message: 'Please sign in to track your watched progress.');
+      return;
+    }
+
     if (season == _watchedSeason && episode == _watchedEpisode) {
       // Unmarking the current progress
       if (episode > 1) {

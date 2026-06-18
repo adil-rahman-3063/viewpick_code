@@ -6,6 +6,7 @@ import '../services/tmdb_service.dart';
 import '../services/supabase_service.dart';
 import '../services/location_service.dart';
 import '../widget/toast.dart';
+import '../widget/login_prompt.dart';
 import 'actors.dart';
 
 class MoviePage extends StatefulWidget {
@@ -145,6 +146,11 @@ class _MoviePageState extends State<MoviePage> {
   Future<void> _handleMainAction() async {
     if (_movieDetails == null) return;
 
+    if (SupabaseService.currentUser() == null) {
+      showLoginPrompt(context, message: 'Please sign in to add titles to your watchlist or mark them as watched.');
+      return;
+    }
+
     try {
       final runtime = _movieDetails!['runtime'] as int?;
 
@@ -221,6 +227,11 @@ class _MoviePageState extends State<MoviePage> {
 
   Future<void> _toggleLike() async {
     if (_movieDetails == null) return;
+
+    if (SupabaseService.currentUser() == null) {
+      showLoginPrompt(context, message: 'Please sign in to add titles to your favorites.');
+      return;
+    }
 
     final newLikeState = !_isLiked;
     setState(() => _isLiked = newLikeState);

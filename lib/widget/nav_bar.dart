@@ -6,6 +6,8 @@ import '../pages/home_page.dart';
 import '../pages/explore.dart';
 import '../pages/list_page.dart';
 import '../pages/profile.dart';
+import '../services/supabase_service.dart';
+import 'login_prompt.dart';
 
 /// Frosted, pill-shaped bottom navigation bar with five icons.
 ///
@@ -31,6 +33,19 @@ class FrostedNavBar extends StatelessWidget {
 
   /// Handle navigation based on the nav bar item index
   static void handleNavigation(BuildContext context, int index) {
+    if (SupabaseService.currentUser() == null) {
+      if (index == 0) {
+        showLoginPrompt(context, message: 'Sign in to Swipe and find the perfect movie or series to watch with friends!');
+        return;
+      } else if (index == 3) {
+        showLoginPrompt(context, message: 'Sign in to view and manage your watchlist and watched history!');
+        return;
+      } else if (index == 4) {
+        showLoginPrompt(context, message: 'Sign in to view your profile, stats, and settings!');
+        return;
+      }
+    }
+
     switch (index) {
       case 0: // Swipe icon - navigate to SwipePage
         Navigator.of(context).pushReplacement(
