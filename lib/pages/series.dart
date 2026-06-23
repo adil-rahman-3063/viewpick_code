@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import '../widget/youtube_web_player.dart';
 import '../services/tmdb_service.dart';
 import '../services/supabase_service.dart';
 import '../services/location_service.dart';
@@ -34,7 +34,7 @@ class _SeriesPageState extends State<SeriesPage> {
   int? _watchedEpisode;
   bool _isUpdatingWatched = false;
 
-  YoutubePlayerController? _youtubeController;
+  String? _trailerId;
   final Map<int, List<dynamic>> _seasonEpisodes = {};
 
   @override
@@ -45,7 +45,6 @@ class _SeriesPageState extends State<SeriesPage> {
 
   @override
   void dispose() {
-    _youtubeController?.dispose();
     super.dispose();
   }
 
@@ -114,10 +113,7 @@ class _SeriesPageState extends State<SeriesPage> {
       }
 
       if (trailerId != null) {
-        _youtubeController = YoutubePlayerController(
-          initialVideoId: trailerId,
-          flags: const YoutubePlayerFlags(autoPlay: false, mute: false),
-        );
+        _trailerId = trailerId;
       }
 
       if (mounted) {
@@ -436,7 +432,7 @@ class _SeriesPageState extends State<SeriesPage> {
     if (_isLoading) {
       return Scaffold(
         backgroundColor: backgroundColor,
-        extendBodyBehindAppBar: _youtubeController == null,
+        extendBodyBehindAppBar: _trailerId == null,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -674,7 +670,7 @@ class _SeriesPageState extends State<SeriesPage> {
 
     return Scaffold(
       backgroundColor: backgroundColor,
-      extendBodyBehindAppBar: _youtubeController == null,
+      extendBodyBehindAppBar: _trailerId == null,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -687,19 +683,12 @@ class _SeriesPageState extends State<SeriesPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_youtubeController != null)
+            if (_trailerId != null)
               Container(
-                height: 250,
-                width: double.infinity,
                 color: Colors.black,
-                child: YoutubePlayer(
-                  controller: _youtubeController!,
-                  showVideoProgressIndicator: true,
-                  progressIndicatorColor: Colors.red,
-                  progressColors: const ProgressBarColors(
-                    playedColor: Colors.red,
-                    handleColor: Colors.redAccent,
-                  ),
+                child: YoutubeWebPlayer(
+                  videoId: _trailerId!,
+                  height: 250,
                 ),
               )
             else

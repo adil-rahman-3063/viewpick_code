@@ -6,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'firebase_options.dart';
 import 'theme/app_theme.dart';
 import 'login.dart';
+import 'pages/landing_page.dart';
 import 'register.dart';
 import 'pages/home_page.dart';
 import 'pages/settings.dart';
@@ -95,6 +96,7 @@ class MyApp extends StatelessWidget {
             final session = Supabase.instance.client.auth.currentSession;
             final isPublicRoute =
                 settings.name == '/' ||
+                settings.name == '/landing' ||
                 settings.name == '/login' ||
                 settings.name == '/register' ||
                 settings.name == '/forgot_password' ||
@@ -141,6 +143,7 @@ class MyApp extends StatelessWidget {
           },
           routes: {
             '/': (context) => const AuthHandler(),
+            '/landing': (context) => const LandingPage(),
             '/login': (context) => const LoginPage(),
             '/register': (context) => const RegisterPage(),
             '/forgot_password': (context) => const ForgotPasswordPage(),
@@ -171,7 +174,8 @@ class _AuthHandlerState extends State<AuthHandler> {
             return HomePage();
           }
         }
-        return const LoginPage();
+        // Show landing page for unauthenticated users
+        return const LandingPage();
       },
     );
   }

@@ -485,7 +485,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     if (mounted) {
                       Navigator.of(
                         context,
-                      ).pushNamedAndRemoveUntil('/login', (route) => false);
+                      ).pushNamedAndRemoveUntil('/landing', (route) => false);
                     }
                   },
                   style: ElevatedButton.styleFrom(

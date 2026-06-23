@@ -42,7 +42,21 @@ class SupabaseService {
 
   // Sign in with Google
   static Future<AuthResponse?> signInWithGoogle() async {
-    await supabase.auth.signInWithOAuth(Provider.google);
+    // Dynamically build redirectTo from the current browser URL.
+    // This ensures OAuth returns to localhost:3000 in dev and
+    // viewpick.vercel.com in production — not always the Supabase Site URL.
+    String? redirectTo;
+    if (kIsWeb) {
+      final uri = Uri.base;
+      final port = (uri.port == 80 || uri.port == 443 || uri.port == 0)
+          ? ''
+          : ':${uri.port}';
+      redirectTo = '${uri.scheme}://${uri.host}$port/';
+    }
+    await supabase.auth.signInWithOAuth(
+      Provider.google,
+      redirectTo: redirectTo,
+    );
     return null; // Will redirect on web
   }
 

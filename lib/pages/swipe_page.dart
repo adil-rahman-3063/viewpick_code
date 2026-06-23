@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import '../services/tmdb_service.dart';
 import '../services/supabase_service.dart';
@@ -19,6 +20,7 @@ class SwipePage extends StatefulWidget {
 
 class _SwipePageState extends State<SwipePage> {
   final CardSwiperController controller = CardSwiperController();
+  final FocusNode _keyboardFocus = FocusNode();
   final TMDBService _tmdbService = TMDBService();
   Map<int, String> _genreMap = {};
   Map<int, String> _tvGenreMap = {};
@@ -31,7 +33,34 @@ class _SwipePageState extends State<SwipePage> {
   void initState() {
     super.initState();
     _initialize();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _checkFirstTime());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkFirstTime();
+      _keyboardFocus.requestFocus();
+    });
+  }
+
+  @override
+  void dispose() {
+    _keyboardFocus.dispose();
+    super.dispose();
+  }
+
+  void _handleKeyEvent(KeyEvent event) {
+    if (event is! KeyDownEvent) return;
+    if (_isLoading || _movies.isEmpty) return;
+    switch (event.logicalKey) {
+      case LogicalKeyboardKey.arrowRight:
+        controller.swipeRight();
+        break;
+      case LogicalKeyboardKey.arrowLeft:
+        controller.swipeLeft();
+        break;
+      case LogicalKeyboardKey.arrowUp:
+        controller.swipeTop();
+        break;
+      default:
+        break;
+    }
   }
 
   Future<void> _checkFirstTime() async {
@@ -55,53 +84,13 @@ class _SwipePageState extends State<SwipePage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.swipe_right,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Swipe Right to Like',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.swipe_left,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Swipe Left to Dislike',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.swipe_up,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Swipe Up to Skip',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
+                _InstructionRow(Icons.swipe_right,   '→  Swipe Right / Arrow Right', Theme.of(context).colorScheme.primary),
+                const SizedBox(height: 10),
+                _InstructionRow(Icons.swipe_left,    '←  Swipe Left / Arrow Left',  Theme.of(context).colorScheme.error),
+                const SizedBox(height: 10),
+                _InstructionRow(Icons.swipe_up,      '↑  Swipe Up / Arrow Up — Skip', Theme.of(context).colorScheme.secondary),
+                const SizedBox(height: 10),
+                _InstructionRow(Icons.touch_app,     'Tap card to open details',     Theme.of(context).colorScheme.onSurfaceVariant),
               ],
             ),
             actions: [
@@ -564,7 +553,10 @@ class _SwipePageState extends State<SwipePage> {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayout(
+    return KeyboardListener(
+      focusNode: _keyboardFocus,
+      onKeyEvent: _handleKeyEvent,
+      child: ResponsiveLayout(
       selectedIndex: 0,
       child: Column(
         children: [
@@ -635,7 +627,7 @@ class _SwipePageState extends State<SwipePage> {
                         onSwipe: _onSwipe,
                         onUndo: _onUndo,
                         isLoop: false,
-                        allowedSwipeDirection: const AllowedSwipeDirection.only(left: true, right: true),
+                        allowedSwipeDirection: const AllowedSwipeDirection.only(left: true, right: true, up: true),
                         numberOfCardsDisplayed: _movies.length < 3
                             ? _movies.length
                             : 3,
@@ -672,7 +664,7 @@ class _SwipePageState extends State<SwipePage> {
             ),
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildControlButton(IconData icon, VoidCallback onPressed) {
@@ -910,9 +902,6 @@ class _SwipePageState extends State<SwipePage> {
       final movie = _movies[previousIndex];
       _saveLikedMovie(movie);
 
-      // Add to watchlist automatically on swipe right
-      SupabaseService.addToWatchlist(movie, movie['is_movie'] ?? true);
-
       // Show action dialog after a short delay to allow swipe animation to complete
       Future.delayed(const Duration(milliseconds: 200), () {
         if (mounted) {
@@ -927,6 +916,9 @@ class _SwipePageState extends State<SwipePage> {
           _showDislikeReasonDialog(movie);
         }
       });
+    } else if (direction == CardSwiperDirection.top) {
+      // Swipe up = skip silently (no action saved)
+      if (mounted) Toast.show(context, 'Skipped');
     }
 
     // Infinite scroll trigger: Fetch more items frequently
@@ -1873,5 +1865,33 @@ class _SwipePageState extends State<SwipePage> {
   ) {
     debugPrint('The card $currentIndex was undod from the ${direction.name}.');
     return true;
+  }
+}
+
+// Helper widget for the instructions dialog rows
+class _InstructionRow extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color color;
+
+  const _InstructionRow(this.icon, this.label, this.color);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: color, size: 22),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            label,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
